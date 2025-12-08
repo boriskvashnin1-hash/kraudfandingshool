@@ -6,44 +6,267 @@
     <title>HelProjects - Краудфандинг платформа</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Дополнительные стили для главной страницы */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+            padding: 0 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #4361ee;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .stats {
+            background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .how-it-works {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #4361ee;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+        
+        .cta-section {
+            background: #f8f9fa;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
 <body>
-    <!-- Навигация -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">HelProjects</a>
-            <div class="nav-links">
-                <a href="index.html">Главная</a>
-                <a href="pages/projects.html">Проекты</a>
-                <a href="pages/create.html">Создать проект</a>
-                <a href="pages/profile.html">Профиль</a>
-                <a href="#" id="authButton">Войти</a>
-            </div>
-            <button class="menu-toggle">☰</button>
-        </div>
-    </nav>
+    <!-- Заголовок будет загружен через JavaScript -->
+    <div id="headerContainer"></div>
 
     <!-- Герой секция -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Реализуйте свои идеи с HelProjects</h1>
-            <p>Платформа для краудфандинга, где каждый может поддержать важные проекты</p>
-            <a href="pages/create.html" class="btn-primary">Создать проект</a>
+            <h1>Реализуйте свои идеи вместе с HelProjects</h1>
+            <p>Первая платформа для краудфандинга, где студенты помогают студентам реализовать важные проекты</p>
+            <div class="cta-buttons">
+                <a href="pages/create.html" class="btn-primary">
+                    <i class="fas fa-plus-circle"></i> Создать проект
+                </a>
+                <a href="pages/projects.html" class="btn-secondary">
+                    <i class="fas fa-search"></i> Найти проект
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Особенности платформы -->
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-hand-holding-heart"></i>
+            </div>
+            <h3>Простота поддержки</h3>
+            <p>Поддерживайте проекты, которые вам нравятся, любой суммой от 100 рублей</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Безопасность</h3>
+            <p>Все платежи защищены. Деньги передаются автору только при достижении цели</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3>Сообщество</h3>
+            <p>Присоединяйтесь к сообществу студентов, которые меняют мир к лучшему</p>
         </div>
     </section>
 
     <!-- Популярные проекты -->
     <section class="projects-section">
         <h2>Популярные проекты</h2>
+        <p class="section-subtitle">Проекты, которые уже близки к достижению цели</p>
+        
         <div class="projects-grid" id="featuredProjects">
             <!-- Проекты будут загружены через JavaScript -->
+            <div class="loading">Загрузка проектов...</div>
         </div>
-        <a href="pages/projects.html" class="btn-secondary">Все проекты</a>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="pages/projects.html" class="btn-secondary">Смотреть все проекты</a>
+        </div>
+    </section>
+
+    <!-- Как это работает -->
+    <section class="how-it-works">
+        <h2 style="text-align: center;">Как работает HelProjects</h2>
+        <p class="section-subtitle" style="text-align: center; margin-bottom: 3rem;">Всего 3 простых шага до реализации вашей идеи</p>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Создайте проект</h3>
+                <p>Расскажите о своей идее, установите цель сбора и сроки реализации</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Расскажите о нём</h3>
+                <p>Поделитесь проектом с друзьями, одногруппниками и в социальных сетях</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Собирайте средства</h3>
+                <p>Получайте поддержку от сообщества и реализуйте свой проект</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Статистика -->
+    <section class="stats">
+        <h2>HelProjects в цифрах</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3 id="totalProjectsCount">50+</h3>
+                <p>успешных проектов</p>
+            </div>
+            
+            <div class="stat-item">
+                <h3 id="totalRaisedAmount">1.5M+</h3>
+                <p>рублей собрано</p>
+            </div>
+            
+            <div class="stat-item">
+                <h3 id="totalSupporters">1000+</h3>
+                <p>студентов-участников</p>
+            </div>
+            
+            <div class="stat-item">
+                <h3 id="successRate">85%</h3>
+                <p>проектов достигают цели</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Призыв к действию -->
+    <section class="cta-section">
+        <h2>Присоединяйтесь к сообществу HelProjects</h2>
+        <p>Начните менять мир уже сегодня. Создайте свой первый проект или поддержите существующий</p>
+        
+        <div class="cta-buttons">
+            <a href="pages/create.html" class="btn-primary" style="padding: 1rem 2.5rem;">
+                <i class="fas fa-rocket"></i> Начать сбор средств
+            </a>
+            <a href="pages/projects.html" class="btn-secondary" style="padding: 1rem 2.5rem;">
+                <i class="fas fa-heart"></i> Поддержать проект
+            </a>
+        </div>
     </section>
 
     <!-- Футер -->
     <footer>
-        <p>&copy; 2024 HelProjects. Все права защищены.</p>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h3 style="color: white; margin-bottom: 1rem;">HelProjects</h3>
+                    <p style="color: #ccc;">Платформа для студенческого краудфандинга</p>
+                </div>
+                
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Навигация</h4>
+                    <p><a href="index.html" style="color: #ccc;">Главная</a></p>
+                    <p><a href="pages/projects.html" style="color: #ccc;">Проекты</a></p>
+                    <p><a href="pages/create.html" style="color: #ccc;">Создать проект</a></p>
+                </div>
+                
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Контакты</h4>
+                    <p style="color: #ccc;"><i class="fas fa-envelope"></i> support@helprojects.ru</p>
+                    <p style="color: #ccc;"><i class="fas fa-phone"></i> +7 (XXX) XXX-XX-XX</p>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px solid #444; padding-top: 2rem; text-align: center;">
+                <p>&copy; 2024 HelProjects. Все права защищены.</p>
+                <p style="color: #ccc; font-size: 0.9rem; margin-top: 0.5rem;">
+                    Сделано с ❤️ студентами для студентов
+                </p>
+            </div>
+        </div>
     </footer>
 
     <!-- Модальное окно для авторизации -->
@@ -51,15 +274,425 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Вход / Регистрация</h2>
-            <form id="authForm">
-                <input type="email" id="authEmail" placeholder="Email" required>
-                <input type="password" id="authPassword" placeholder="Пароль" required>
-                <button type="submit" class="btn-primary">Войти</button>
-                <button type="button" id="registerBtn" class="btn-secondary">Зарегистрироваться</button>
+            
+            <div id="authTabs" style="display: flex; margin-bottom: 1.5rem;">
+                <button id="loginTab" class="tab-btn active" style="flex: 1; padding: 0.8rem; background: #4361ee; color: white; border: none; cursor: pointer;">
+                    Вход
+                </button>
+                <button id="registerTab" class="tab-btn" style="flex: 1; padding: 0.8rem; background: #ddd; color: #333; border: none; cursor: pointer;">
+                    Регистрация
+                </button>
+            </div>
+            
+            <form id="loginForm" style="display: block;">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Пароль" required>
+                <button type="submit" class="btn-primary" style="width: 100%;">Войти</button>
             </form>
+            
+            <form id="registerForm" style="display: none;">
+                <input type="text" id="registerUsername" placeholder="Имя пользователя" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Пароль" required>
+                <input type="password" id="registerConfirmPassword" placeholder="Повторите пароль" required>
+                <button type="submit" class="btn-primary" style="width: 100%;">Зарегистрироваться</button>
+            </form>
+            
+            <div id="authMessage" class="alert" style="display: none; margin-top: 1rem;"></div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Основной скрипт -->
+    <script type="module">
+        // Импорт модулей (в будущем, когда подключим модули)
+        // import { initAuth } from './js/auth.js';
+        // import { loadFeaturedProjects } from './js/projects.js';
+        
+        // Глобальные функции для тестирования
+        function showMessage(text, type = 'info') {
+            alert(`${type.toUpperCase()}: ${text}`);
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('HelProjects загружен!');
+            
+            // Инициализация шапки
+            initHeader();
+            
+            // Инициализация модального окна
+            initAuthModal();
+            
+            // Загрузка проектов
+            loadFeaturedProjects();
+            
+            // Обновление статистики
+            updateStatistics();
+        });
+        
+        // Инициализация шапки
+        function initHeader() {
+            // Проверяем, авторизован ли пользователь
+            const user = localStorage.getItem('helprojects_user');
+            const authButton = document.getElementById('authButton');
+            
+            if (authButton) {
+                if (user) {
+                    const userData = JSON.parse(user);
+                    authButton.innerHTML = `<i class="fas fa-user"></i> ${userData.username}`;
+                    authButton.href = 'pages/profile.html';
+                    authButton.onclick = null;
+                } else {
+                    authButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Войти';
+                    authButton.href = '#';
+                    authButton.onclick = () => {
+                        document.getElementById('authModal').style.display = 'block';
+                    };
+                }
+            }
+            
+            // Мобильное меню
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            // Рендерим шапку
+            renderHeader();
+        }
+        
+        // Рендеринг шапки
+        function renderHeader() {
+            const headerContainer = document.getElementById('headerContainer');
+            if (!headerContainer) return;
+            
+            headerContainer.innerHTML = `
+                <nav class="navbar">
+                    <div class="nav-container">
+                        <a href="index.html" class="logo">HelProjects</a>
+                        <div class="nav-links">
+                            <a href="index.html">Главная</a>
+                            <a href="pages/projects.html">Проекты</a>
+                            <a href="pages/create.html">Создать проект</a>
+                            <a href="pages/profile.html">Профиль</a>
+                            <a href="#" id="authButton">Войти</a>
+                        </div>
+                        <button class="menu-toggle">☰</button>
+                    </div>
+                </nav>
+            `;
+        }
+        
+        // Инициализация модального окна авторизации
+        function initAuthModal() {
+            const authModal = document.getElementById('authModal');
+            const closeBtn = document.querySelector('.close');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            // Переключение между вкладками
+            if (loginTab && registerTab) {
+                loginTab.addEventListener('click', () => {
+                    loginTab.classList.add('active');
+                    loginTab.style.background = '#4361ee';
+                    loginTab.style.color = 'white';
+                    
+                    registerTab.classList.remove('active');
+                    registerTab.style.background = '#ddd';
+                    registerTab.style.color = '#333';
+                    
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                });
+                
+                registerTab.addEventListener('click', () => {
+                    registerTab.classList.add('active');
+                    registerTab.style.background = '#4361ee';
+                    registerTab.style.color = 'white';
+                    
+                    loginTab.classList.remove('active');
+                    loginTab.style.background = '#ddd';
+                    loginTab.style.color = '#333';
+                    
+                    registerForm.style.display = 'block';
+                    loginForm.style.display = 'none';
+                });
+            }
+            
+            // Закрытие модального окна
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    authModal.style.display = 'none';
+                });
+            }
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === authModal) {
+                    authModal.style.display = 'none';
+                }
+            });
+            
+            // Обработка формы входа
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    // Временная заглушка для тестирования
+                    const user = {
+                        id: 1,
+                        username: email.split('@')[0],
+                        email: email,
+                        created_at: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('helprojects_user', JSON.stringify(user));
+                    showMessage(`Добро пожаловать, ${user.username}!`, 'success');
+                    authModal.style.display = 'none';
+                    
+                    // Обновляем шапку
+                    initHeader();
+                });
+            }
+            
+            // Обработка формы регистрации
+            if (registerForm) {
+                registerForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const username = document.getElementById('registerUsername').value;
+                    const email = document.getElementById('registerEmail').value;
+                    const password = document.getElementById('registerPassword').value;
+                    const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                    
+                    // Валидация
+                    if (password !== confirmPassword) {
+                        showMessage('Пароли не совпадают', 'error');
+                        return;
+                    }
+                    
+                    if (password.length < 6) {
+                        showMessage('Пароль должен быть не менее 6 символов', 'error');
+                        return;
+                    }
+                    
+                    // Временная заглушка для тестирования
+                    const user = {
+                        id: Date.now(),
+                        username: username,
+                        email: email,
+                        created_at: new Date().toISOString()
+                    };
+                    
+                    // Сохраняем пользователя
+                    localStorage.setItem('helprojects_user', JSON.stringify(user));
+                    
+                    // Сохраняем в список пользователей
+                    let users = JSON.parse(localStorage.getItem('helprojects_users') || '[]');
+                    users.push(user);
+                    localStorage.setItem('helprojects_users', JSON.stringify(users));
+                    
+                    showMessage(`Регистрация успешна! Добро пожаловать, ${username}!`, 'success');
+                    authModal.style.display = 'none';
+                    
+                    // Обновляем шапку
+                    initHeader();
+                });
+            }
+        }
+        
+        // Загрузка популярных проектов
+        function loadFeaturedProjects() {
+            const container = document.getElementById('featuredProjects');
+            if (!container) return;
+            
+            // Загружаем проекты из localStorage
+            let projects = JSON.parse(localStorage.getItem('helprojects_projects'));
+            
+            // Если нет проектов, создаем демо-проекты
+            if (!projects || projects.length === 0) {
+                projects = [
+                    {
+                        id: 1,
+                        title: "Экологичная упаковка",
+                        description: "Разработка биоразлагаемой упаковки для столовой университета",
+                        category: "ecology",
+                        goal: 150000,
+                        raised: 120500,
+                        image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                        author: "Эко-клуб ВУЗа",
+                        created_at: "2024-01-10",
+                        deadline: "2024-03-01"
+                    },
+                    {
+                        id: 2,
+                        title: "Студенческая газета",
+                        description: "Запуск печатной версии студенческой газеты для всего кампуса",
+                        category: "education",
+                        goal: 80000,
+                        raised: 65400,
+                        image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                        author: "Студсовет",
+                        created_at: "2024-01-15",
+                        deadline: "2024-02-28"
+                    },
+                    {
+                        id: 3,
+                        title: "3D-принтер для кафедры",
+                        description: "Приобретение 3D-принтера для студенческих проектов и исследований",
+                        category: "technology",
+                        goal: 120000,
+                        raised: 89500,
+                        image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                        author: "Кафедра робототехники",
+                        created_at: "2024-01-05",
+                        deadline: "2024-03-15"
+                    }
+                ];
+                
+                localStorage.setItem('helprojects_projects', JSON.stringify(projects));
+            }
+            
+            // Сортируем по проценту собранных средств
+            projects.sort((a, b) => {
+                const progressA = (a.raised || 0) / a.goal;
+                const progressB = (b.raised || 0) / b.goal;
+                return progressB - progressA;
+            });
+            
+            // Берем первые 3 проекта
+            const featured = projects.slice(0, 3);
+            
+            // Очищаем контейнер
+            container.innerHTML = '';
+            
+            // Рендерим проекты
+            featured.forEach(project => {
+                const progress = Math.min(100, ((project.raised || 0) / project.goal * 100)).toFixed(1);
+                const daysLeft = Math.ceil((new Date(project.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+                
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.innerHTML = `
+                    <img src="${project.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" 
+                         alt="${project.title}" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        
+                        <div class="project-meta">
+                            <span><i class="fas fa-user"></i> ${project.author || 'Автор'}</span>
+                            <span><i class="fas fa-clock"></i> ${daysLeft > 0 ? daysLeft + ' дней' : 'Завершен'}</span>
+                        </div>
+                        
+                        <div class="project-goal">
+                            <div>Собрано: ${(project.raised || 0).toLocaleString()} ₽ из ${project.goal.toLocaleString()} ₽</div>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${progress}%"></div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                            <span>${progress}% завершено</span>
+                            <span style="font-weight: bold; color: ${daysLeft > 0 ? '#4361ee' : '#28a745'}">
+                                ${daysLeft > 0 ? daysLeft + ' дней' : 'Успешно!'}
+                            </span>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="supportProject(${project.id})" 
+                                style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-heart"></i> Поддержать
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(projectCard);
+            });
+        }
+        
+        // Обновление статистики
+        function updateStatistics() {
+            // В реальном приложении здесь будет запрос к API
+            // Сейчас используем демо-данные
+            
+            const projects = JSON.parse(localStorage.getItem('helprojects_projects') || '[]');
+            const users = JSON.parse(localStorage.getItem('helprojects_users') || '[]');
+            
+            // Общая собранная сумма
+            const totalRaised = projects.reduce((sum, project) => sum + (project.raised || 0), 0);
+            
+            // Процент успешных проектов
+            const successfulProjects = projects.filter(p => (p.raised || 0) >= p.goal).length;
+            const successRate = projects.length > 0 ? Math.round((successfulProjects / projects.length) * 100) : 85;
+            
+            // Обновляем DOM
+            document.getElementById('totalProjectsCount').textContent = projects.length > 0 ? `${projects.length}+` : '50+';
+            document.getElementById('totalRaisedAmount').textContent = totalRaised > 0 ? 
+                `${(totalRaised / 1000000).toFixed(1)}M+` : '1.5M+';
+            document.getElementById('totalSupporters').textContent = users.length > 0 ? `${users.length}+` : '1000+';
+            document.getElementById('successRate').textContent = `${successRate}%`;
+        }
+        
+        // Глобальная функция поддержки проекта
+        window.supportProject = function(projectId) {
+            const user = localStorage.getItem('helprojects_user');
+            
+            if (!user) {
+                showMessage('Пожалуйста, войдите в систему, чтобы поддержать проект', 'info');
+                document.getElementById('authModal').style.display = 'block';
+                return;
+            }
+            
+            // Показываем модальное окно для доната
+            const amount = prompt('Введите сумму поддержки (минимум 100 ₽):', '100');
+            
+            if (!amount || isNaN(amount) || parseInt(amount) < 100) {
+                showMessage('Минимальная сумма поддержки - 100 ₽', 'error');
+                return;
+            }
+            
+            const donationAmount = parseInt(amount);
+            
+            // Обновляем проект в localStorage
+            let projects = JSON.parse(localStorage.getItem('helprojects_projects') || '[]');
+            const projectIndex = projects.findIndex(p => p.id === projectId);
+            
+            if (projectIndex !== -1) {
+                projects[projectIndex].raised = (projects[projectIndex].raised || 0) + donationAmount;
+                localStorage.setItem('helprojects_projects', JSON.stringify(projects));
+                
+                // Сохраняем донат
+                const donations = JSON.parse(localStorage.getItem('helprojects_donations') || '[]');
+                const userData = JSON.parse(user);
+                
+                donations.push({
+                    id: Date.now(),
+                    project_id: projectId,
+                    user_id: userData.id,
+                    amount: donationAmount,
+                    created_at: new Date().toISOString()
+                });
+                
+                localStorage.setItem('helprojects_donations', JSON.stringify(donations));
+                
+                showMessage(`Спасибо! Вы поддержали проект на ${donationAmount} ₽`, 'success');
+                
+                // Обновляем отображение проектов
+                loadFeaturedProjects();
+                updateStatistics();
+            }
+        };
+        
+        // Инициализация меню при загрузке
+        initHeader();
+    </script>
 </body>
 </html>
