@@ -1,75 +1,69 @@
-// Базовый скрипт для работы сайта
+// Главный скрипт
+import { renderHeader, initHeader } from './js/header.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Меню для мобильных устройств
+    // Загружаем шапку на все страницы
+    const headerContainer = document.getElementById('headerContainer');
+    if (headerContainer) {
+        headerContainer.innerHTML = renderHeader();
+        initHeader();
+    }
+    
+    // Инициализируем меню
+    initMobileMenu();
+    
+    // Инициализируем модальное окно
+    initAuthModal();
+    
+    // Загружаем проекты на главной
+    if (document.getElementById('featuredProjects')) {
+        loadFeaturedProjects();
+    }
+});
+
+function initMobileMenu() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
     
-    if (menuToggle) {
+    if (menuToggle && navLinks) {
         menuToggle.addEventListener('click', () => {
             navLinks.classList.toggle('active');
         });
     }
-    
-    // Модальное окно авторизации
+}
+
+function initAuthModal() {
     const authButton = document.getElementById('authButton');
     const authModal = document.getElementById('authModal');
     const closeBtn = document.querySelector('.close');
-    const registerBtn = document.getElementById('registerBtn');
-    const authForm = document.getElementById('authForm');
     
     if (authButton) {
-        authButton.addEventListener('click', () => {
-            authModal.style.display = 'block';
+        authButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (authModal) {
+                authModal.style.display = 'block';
+            }
         });
     }
     
-    if (closeBtn) {
+    if (closeBtn && authModal) {
         closeBtn.addEventListener('click', () => {
             authModal.style.display = 'none';
         });
-    }
-    
-    window.addEventListener('click', (e) => {
-        if (e.target === authModal) {
-            authModal.style.display = 'none';
-        }
-    });
-    
-    // Обработка формы авторизации (заглушка)
-    if (authForm) {
-        authForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            
-            // Временная заглушка
-            alert(`Вход выполнен для: ${email}`);
-            authModal.style.display = 'none';
-            
-            // Изменяем кнопку на "Профиль"
-            authButton.textContent = 'Профиль';
-            authButton.href = 'pages/profile.html';
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+            }
         });
     }
-    
-    if (registerBtn) {
-        registerBtn.addEventListener('click', () => {
-            alert('Регистрация (в реальном приложении здесь будет регистрация)');
-        });
-    }
-    
-    // Загрузка примеров проектов
-    loadFeaturedProjects();
-});
+}
 
-// Функция загрузки проектов
+// Функция загрузки проектов (заглушка)
 function loadFeaturedProjects() {
     const projectsGrid = document.getElementById('featuredProjects');
-    
     if (!projectsGrid) return;
     
-    // Примерные данные проектов
     const projects = [
         {
             id: 1,
@@ -97,10 +91,8 @@ function loadFeaturedProjects() {
         }
     ];
     
-    // Очищаем контейнер
     projectsGrid.innerHTML = '';
     
-    // Добавляем проекты
     projects.forEach(project => {
         const progress = (project.raised / project.goal * 100).toFixed(1);
         
@@ -118,7 +110,7 @@ function loadFeaturedProjects() {
                     <div class="progress" style="width: ${progress}%"></div>
                 </div>
                 <div>${progress}% завершено</div>
-                <button class="btn-primary" style="width: 100%; margin-top: 1rem;">Поддержать</button>
+                <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="supportProject(${project.id})">Поддержать</button>
             </div>
         `;
         
@@ -126,53 +118,7 @@ function loadFeaturedProjects() {
     });
 }
 
-// Локальное хранилище для имитации базы данных
-class LocalStorageDB {
-    constructor() {
-        this.storageKey = 'helprojects_data';
-        this.initStorage();
-    }
-    
-    initStorage() {
-        if (!localStorage.getItem(this.storageKey)) {
-            const initialData = {
-                users: [],
-                projects: [],
-                donations: []
-            };
-            localStorage.setItem(this.storageKey, JSON.stringify(initialData));
-        }
-    }
-    
-    getData() {
-        return JSON.parse(localStorage.getItem(this.storageKey));
-    }
-    
-    saveData(data) {
-        localStorage.setItem(this.storageKey, JSON.stringify(data));
-    }
-    
-    addUser(user) {
-        const data = this.getData();
-        user.id = Date.now();
-        data.users.push(user);
-        this.saveData(data);
-        return user;
-    }
-    
-    addProject(project) {
-        const data = this.getData();
-        project.id = Date.now();
-        project.createdAt = new Date().toISOString();
-        data.projects.push(project);
-        this.saveData(data);
-        return project;
-    }
-    
-    getProjects() {
-        return this.getData().projects;
-    }
-}
-
-// Экспортируем для использования в других файлах
-window.localDB = new LocalStorageDB();
+// Глобальные функции
+window.supportProject = function(projectId) {
+    alert(`Поддержка проекта #${projectId} (в реальном приложении здесь будет форма доната)`);
+};
