@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль - HelProjects</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="headerContainer"></div>
+    
+    <div class="page-container">
+        <h1 class="page-title">Мой профиль</h1>
+        
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar" id="userAvatar">
+                    ИИ
+                </div>
+                <div class="profile-info">
+                    <h2 id="userName">Иван Иванов</h2>
+                    <p id="userEmail">ivan@example.com</p>
+                    <p id="userBio">Люблю поддерживать интересные проекты</p>
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="projectsCount">3</span>
+                    <span class="stat-label">Проекта создано</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="donationsCount">12</span>
+                    <span class="stat-label">Проектов поддержано</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalDonated">45,000 ₽</span>
+                    <span class="stat-label">Всего пожертвовано</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="fundsRaised">125,000 ₽</span>
+                    <span class="stat-label">Собрано на проекты</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <h3>Мои проекты</h3>
+                <div id="myProjects" class="loading">
+                    Загрузка проектов...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 HelProjects. Все права защищены.</p>
+    </footer>
+    
+    <script type="module" src="../script.js"></script>
+    <script type="module">
+        // Загрузка данных профиля
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfileData();
+        });
+        
+        function loadProfileData() {
+            // Здесь будет загрузка данных из базы
+            // Временные данные
+            const userData = {
+                name: "Иван Иванов",
+                email: "ivan@example.com",
+                bio: "Люблю поддерживать интересные проекты",
+                stats: {
+                    projects: 3,
+                    donations: 12,
+                    donated: 45000,
+                    raised: 125000
+                }
+            };
+            
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('userBio').textContent = userData.bio;
+            
+            document.getElementById('projectsCount').textContent = userData.stats.projects;
+            document.getElementById('donationsCount').textContent = userData.stats.donations;
+            document.getElementById('totalDonated').textContent = userData.stats.donated.toLocaleString() + ' ₽';
+            document.getElementById('fundsRaised').textContent = userData.stats.raised.toLocaleString() + ' ₽';
+            
+            // Инициалы для аватара
+            const initials = userData.name.split(' ').map(n => n[0]).join('');
+            document.getElementById('userAvatar').textContent = initials;
+        }
+    </script>
+</body>
+</html>
