@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - HelProjects</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="headerContainer"></div>
+    
+    <div class="page-container">
+        <h1 class="page-title">Админ-панель</h1>
+        
+        <div class="alert alert-success" id="adminMessage" style="display: none;"></div>
+        
+        <div class="profile-stats" style="margin-bottom: 3rem;">
+            <div class="stat-card">
+                <span class="stat-number" id="totalProjects">0</span>
+                <span class="stat-label">Всего проектов</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalUsers">0</span>
+                <span class="stat-label">Пользователей</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalDonations">0</span>
+                <span class="stat-label">Донатов</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="totalRaised">0 ₽</span>
+                <span class="stat-label">Всего собрано</span>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+            <div class="form-container">
+                <h3>Управление проектами</h3>
+                <table class="projects-table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectsTable">
+                        <!-- Проекты будут загружены здесь -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="form-container">
+                <h3>Действия администратора</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn-primary" onclick="updateStatistics()">
+                        Обновить статистику
+                    </button>
+                    <button class="btn-secondary" onclick="clearTestData()">
+                        Очистить тестовые данные
+                    </button>
+                    <button class="btn-secondary" onclick="generateTestData()">
+                        Сгенерировать тестовые данные
+                    </button>
+                    <button class="btn-secondary" onclick="exportData()">
+                        Экспорт данных
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 HelProjects. Все права защищены.</p>
+    </footer>
+    
+    <script type="module" src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminData();
+        });
+        
+        function loadAdminData() {
+            // Загрузка статистики
+            const projects = JSON.parse(localStorage.getItem('helprojects_projects') || '[]');
+            const users = JSON.parse(localStorage.getItem('helprojects_users') || '[]');
+            
+            let totalRaised = 0;
+            projects.forEach(project => {
+                totalRaised += project.raised || 0;
+            });
+            
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalDonations').textContent = projects.reduce((sum, p) => sum + (p.donationsCount || 0), 0);
+            document.getElementById('totalRaised').textContent = totalRaised.toLocaleString() + ' ₽';
+            
+            // Загрузка таблицы проектов
+            const table = document.getElementById('projectsTable');
+            table.innerHTML = '';
+            
+            if (projects.length === 0) {
+                table.innerHTML = '<tr><td colspan="3">Проекты не найдены</td></tr>';
+                return;
+            }
+            
+            projects.slice(0, 5).forEach(project => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${project.title}</td>
+                    <td><span class="status-badge ${project.status || 'active'}">${project.status || 'активный'}</span></td>
+                    <td>
+                        <button class="btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.9rem;" 
+                                onclick="editProject(${project.id})">Редактировать</button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+        
+        function updateStatistics() {
+            showMessage('Статистика обновлена', 'success');
+            loadAdminData();
+        }
+        
+        function clearTestData() {
+            if (confirm('Вы уверены, что хотите очистить все тестовые данные?')) {
+                localStorage.removeItem('helprojects_projects');
+                localStorage.removeItem('helprojects_users');
+                localStorage.removeItem('helprojects_donations');
+                showMessage('Данные очищены', 'success');
+                loadAdminData();
+            }
+        }
+        
+        function generateTestData() {
+            const testProjects = [
+                {
+                    id: Date.now(),
+                    title: "Тестовый проект 1",
+                    description: "Описание тестового проекта",
+                    category: "technology",
+                    goal: 100000,
+                    raised: 25000,
+                    status: "active",
+                    author: "Тестовый пользователь",
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 1,
+                    title: "Тестовый проект 2",
+                    description: "Ещё один тестовый проект",
+                    category: "art",
+                    goal: 50000,
+                    raised: 50000,
+                    status: "completed",
+                    author: "Тестовый пользователь",
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            let projects = JSON.parse(localStorage.getItem('helprojects_projects') || '[]');
+            projects = [...projects, ...testProjects];
+            localStorage.setItem('helprojects_projects', JSON.stringify(projects));
+            
+            showMessage('Тестовые данные добавлены', 'success');
+            loadAdminData();
+        }
+        
+        function exportData() {
+            const data = {
+                projects: JSON.parse(localStorage.getItem('helprojects_projects') || '[]'),
+                users: JSON.parse(localStorage.getItem('helprojects_users') || '[]'),
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `helprojects-export-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            showMessage('Данные экспортированы', 'success');
+        }
+        
+        function editProject(projectId) {
+            alert(`Редактирование проекта #${projectId}`);
+        }
+        
+        function showMessage(text, type) {
+            const message = document.getElementById('adminMessage');
+            message.textContent = text;
+            message.className = `alert alert-${type}`;
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+        
+        window.updateStatistics = updateStatistics;
+        window.clearTestData = clearTestData;
+        window.generateTestData = generateTestData;
+        window.exportData = exportData;
+        window.editProject = editProject;
+    </script>
+    
+    <style>
+        .status-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge.completed {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-badge.draft {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+    </style>
+</body>
+</html>
