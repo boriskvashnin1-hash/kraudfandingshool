@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Все проекты - HelProjects</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="headerContainer"></div>
+    
+    <div class="page-container">
+        <h1 class="page-title">Все проекты</h1>
+        
+        <div style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn-secondary active" onclick="filterProjects('all')">Все</button>
+            <button class="btn-secondary" onclick="filterProjects('technology')">Технологии</button>
+            <button class="btn-secondary" onclick="filterProjects('art')">Искусство</button>
+            <button class="btn-secondary" onclick="filterProjects('education')">Образование</button>
+            <button class="btn-secondary" onclick="filterProjects('social')">Социальные</button>
+            <button class="btn-secondary" onclick="filterProjects('ecology')">Экология</button>
+        </div>
+        
+        <div class="projects-grid" id="projectsContainer">
+            <!-- Проекты будут загружены здесь -->
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <button class="btn-secondary" onclick="loadMoreProjects()" id="loadMoreBtn">
+                Загрузить ещё
+            </button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 HelProjects. Все права защищены.</p>
+    </footer>
+    
+    <script type="module" src="../script.js"></script>
+    <script>
+        let currentPage = 1;
+        const projectsPerPage = 6;
+        let currentFilter = 'all';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjects();
+        });
+        
+        function loadProjects() {
+            const container = document.getElementById('projectsContainer');
+            container.innerHTML = '<div class="loading">Загрузка проектов...</div>';
+            
+            // Загружаем проекты из localStorage или используем заглушку
+            let projects = JSON.parse(localStorage.getItem('helprojects_projects'));
+            
+            if (!projects || projects.length === 0) {
+                // Заглушечные данные
+                projects = [
+                    {
+                        id: 1,
+                        title: "Экологичная упаковка",
+                        description: "Разработка биоразлагаемой упаковки для продуктов питания",
+                        category: "ecology",
+                        goal: 500000,
+                        raised: 325000,
+                        image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                        author: "Эко-стартап",
+                        createdAt: "2024-01-15"
+                    },
+                    {
+                        id: 2,
+                        title: "Образовательное приложение",
+                        description: "Интерактивное приложение для изучения математики детьми",
+                        category: "education",
+                        goal: 300000,
+                        raised: 210000,
+                        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                        author: "Образовательный центр",
+                        createdAt: "2024-01-10"
+                    },
+                    {
+                        id: 3,
+                        title: "Социальный театр",
+                        description: "Создание передвижного театра для отдаленных районов",
+                        category: "social",
+                        goal: 750000,
+                        raised: 420000,
+                        image: "https://images.unsplash.com/photo-1549576490-b0b4831ef60a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                        author: "Театральная студия",
+                        createdAt: "2024-01-05"
+                    }
+                ];
+            }
+            
+            // Фильтрация
+            const filteredProjects = currentFilter === 'all' 
+                ? projects 
+                : projects.filter(p => p.category === currentFilter);
+            
+            // Пагинация
+            const startIndex = 0;
+            const endIndex = currentPage * projectsPerPage;
+            const paginatedProjects = filteredProjects.slice(startIndex, endIndex);
+            
+            if (paginatedProjects.length === 0) {
+                container.innerHTML = '<div class="error">Проекты не найдены</div>';
+                return;
+            }
+            
+            renderProjects(paginatedProjects, container);
+            
+            // Скрываем кнопку "Загрузить ещё" если все проекты загружены
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (loadMoreBtn) {
+                loadMoreBtn.style.display = endIndex >= filteredProjects.length ? 'none' : 'block';
+            }
+        }
+        
+        function renderProjects(projects, container) {
+            container.innerHTML = '';
+            
+            projects.forEach(project => {
+                const progress = project.goal > 0 ? (project.raised / project.goal * 100).toFixed(1) : 0;
+                
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.innerHTML = `
+                    <img src="${project.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" 
+                         alt="${project.title}" class="project-image">
+                    <div class="project-content">
+                        <span class="category-badge">${getCategoryName(project.category)}</span>
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-meta">
+                            <span><i class="fas fa-user"></i> ${project.author || 'Автор'}</span>
+                            <span><i class="fas fa-calendar"></i> ${new Date(project.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div class="project-goal">
+                            <div>Собрано: ${project.raised?.toLocaleString() || 0} ₽ из ${project.goal.toLocaleString()} ₽</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${progress}%"></div>
+                        </div>
+                        <div>${progress}% завершено</div>
+                        <button class="btn-primary" style="width: 100%; margin-top: 1rem;" 
+                                onclick="viewProject(${project.id})">
+                            Подробнее
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(projectCard);
+            });
+        }
+        
+        function getCategoryName(category) {
+            const categories = {
+                'technology': 'Технологии',
+                'art': 'Искусство',
+                'education': 'Образование',
+                'social': 'Социальные',
+                'ecology': 'Экология',
+                'business': 'Бизнес'
+            };
+            return categories[category] || category;
+        }
+        
+        function filterProjects(category) {
+            currentFilter = category;
+            currentPage = 1;
+            
+            // Обновляем активную кнопку
+            document.querySelectorAll('.btn-secondary').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadProjects();
+        }
+        
+        function loadMoreProjects() {
+            currentPage++;
+            loadProjects();
+        }
+        
+        function viewProject(projectId) {
+            alert(`Просмотр проекта #${projectId} (в реальном приложении здесь будет страница проекта)`);
+            // В реальном приложении: window.location.href = `project.html?id=${projectId}`;
+        }
+        
+        window.filterProjects = filterProjects;
+        window.loadMoreProjects = loadMoreProjects;
+        window.viewProject = viewProject;
+    </script>
+</body>
+</html>
