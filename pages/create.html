@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать проект - HelProjects</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="headerContainer"></div>
+    
+    <div class="page-container">
+        <h1 class="page-title">Создать новый проект</h1>
+        
+        <div class="form-container">
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectTitle">Название проекта *</label>
+                    <input type="text" id="projectTitle" required 
+                           placeholder="Краткое и понятное название">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectDescription">Краткое описание *</label>
+                    <textarea id="projectDescription" required 
+                              placeholder="Опишите ваш проект в 2-3 предложениях"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectFullDescription">Полное описание *</label>
+                    <textarea id="projectFullDescription" required 
+                              placeholder="Подробно расскажите о вашем проекте: цели, задачи, план реализации"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectCategory">Категория *</label>
+                    <select id="projectCategory" required>
+                        <option value="">Выберите категорию</option>
+                        <option value="technology">Технологии</option>
+                        <option value="art">Искусство</option>
+                        <option value="education">Образование</option>
+                        <option value="social">Социальные проекты</option>
+                        <option value="ecology">Экология</option>
+                        <option value="business">Бизнес</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectGoal">Целевая сумма (₽) *</label>
+                    <input type="number" id="projectGoal" required 
+                           min="10000" step="1000"
+                           placeholder="Минимум 10,000 ₽">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectDeadline">Срок сбора *</label>
+                    <input type="date" id="projectDeadline" required 
+                           min="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectImage">Ссылка на изображение</label>
+                    <input type="url" id="projectImage" 
+                           placeholder="https://example.com/image.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectVideo">Ссылка на видео (YouTube)</label>
+                    <input type="url" id="projectVideo" 
+                           placeholder="https://youtube.com/watch?v=...">
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    Создать проект
+                </button>
+            </form>
+            
+            <div id="formMessage" class="alert" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 HelProjects. Все права защищены.</p>
+    </footer>
+    
+    <script type="module" src="../script.js"></script>
+    <script>
+        // Устанавливаем минимальную дату (завтра)
+        document.addEventListener('DOMContentLoaded', function() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+            document.getElementById('projectDeadline').min = minDate;
+            
+            // Обработка формы
+            const form = document.getElementById('projectForm');
+            const message = document.getElementById('formMessage');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Проверка данных
+                const goal = parseInt(document.getElementById('projectGoal').value);
+                if (goal < 10000) {
+                    showMessage('Минимальная сумма сбора - 10,000 ₽', 'error');
+                    return;
+                }
+                
+                const deadline = new Date(document.getElementById('projectDeadline').value);
+                if (deadline < tomorrow) {
+                    showMessage('Срок сбора должен быть в будущем', 'error');
+                    return;
+                }
+                
+                // Собираем данные
+                const projectData = {
+                    title: document.getElementById('projectTitle').value,
+                    description: document.getElementById('projectDescription').value,
+                    fullDescription: document.getElementById('projectFullDescription').value,
+                    category: document.getElementById('projectCategory').value,
+                    goal: goal,
+                    deadline: deadline.toISOString().split('T')[0],
+                    image: document.getElementById('projectImage').value || null,
+                    video: document.getElementById('projectVideo').value || null
+                };
+                
+                // Сохраняем в локальное хранилище (временно)
+                let projects = JSON.parse(localStorage.getItem('helprojects_projects') || '[]');
+                projectData.id = Date.now();
+                projectData.createdAt = new Date().toISOString();
+                projectData.raised = 0;
+                projectData.author = "Текущий пользователь";
+                
+                projects.push(projectData);
+                localStorage.setItem('helprojects_projects', JSON.stringify(projects));
+                
+                showMessage('Проект успешно создан! Через 3 секунды вы будете перенаправлены...', 'success');
+                
+                // Перенаправляем на страницу проектов
+                setTimeout(() => {
+                    window.location.href = 'projects.html';
+                }, 3000);
+            });
+            
+            function showMessage(text, type) {
+                message.textContent = text;
+                message.className = `alert alert-${type}`;
+                message.style.display = 'block';
+                
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
